@@ -153,7 +153,7 @@ const game = (() => {
             let header = {};
 
             rle.split('\n')
-                .filter(x => !!x.indexOf('#')) // header info ausfiltern
+                .filter(x => !!x.indexOf('#')) // header info ausfiltern        
                 .forEach((line, i) => {
                     if (!headerParsed) {
 
