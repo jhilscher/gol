@@ -27,7 +27,7 @@ const game = (() => {
             gameLoop();
         };
         const clear = () => {
-            randomFillTableau();
+            clearTableau();
             drawTableau();
         };
 
@@ -45,6 +45,7 @@ const game = (() => {
             mouseDown = true;
             clickHandler(event);
         });
+
         window.addEventListener('mouseup', (event) => {
             mouseDown = false;
         });
@@ -83,10 +84,19 @@ const game = (() => {
         ctx.fillRect(x, y, cellSize - 1, cellSize - 1);
     };
 
-    const randomFillTableau = () => {
+
+    const setTableauCells = (lamda) => {
         for (let i = 0; i < size; i++) {
-            tableau[i] = Array.from({ length: size }, () => false);//() => !!~~(Math.random() * 1.5));
+            tableau[i] = Array.from({ length: size }, lamda);
         }
+    }
+
+    const randomFillTableau = () => {
+        setTableauCells(() => !!~~(Math.random() * 1.5));
+    };
+
+    const clearTableau = () => {
+        setTableauCells(() => false);
     };
 
     const drawTableau = () => {
@@ -117,7 +127,7 @@ const game = (() => {
                         nextRow[cellIndex] +
                         nextRow[nextIndex];
 
-            let newValue = (count == 2 && cellValue) || count == 3;
+            let newValue = (count === 2 && cellValue) || count === 3;
 
             if (cellIndex === 0)
                 newGenTableau[rowIndex] = [];
@@ -148,12 +158,15 @@ const game = (() => {
             drawTableau();
         },
         load: (rle) => {
+
+            // WIP: read RLE formatted cols 
+
             let ident;
             let headerParsed = false;
             let header = {};
 
             rle.split('\n')
-                .filter(x => !!x.indexOf('#')) // header info ausfiltern        
+                .filter(x => !!x.indexOf('#')) // filter format header        
                 .forEach((line, i) => {
                     if (!headerParsed) {
 
